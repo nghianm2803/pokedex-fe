@@ -3,7 +3,7 @@ import { FormProvider, FTextField } from './form';
 import Modal from '@mui/material/Modal';
 
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { alpha, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -39,10 +39,18 @@ export default function PokemonModal({ open, setOpen }) {
     } = methods;
     const dispatch = useDispatch();
 
+    const { pokemons } = useSelector((state) => state.pokemons);
+
+    // Find the maximum ID from the existing Pokemon list
+    const maxPokemonId = Math.max(...pokemons.map((pokemon) => parseInt(pokemon.id)));
+
+    // Calculate the new ID by incrementing the maximum ID by 1
+    const newPokemonId = maxPokemonId + 1;
+
     const onSubmit = (data) => {
-        const { name, id, url, type1, type2 } = data
-        dispatch(addPokemon({ name, id, imgUrl: url, types: [type1, type2] }))
-        navigate(`/pokemons/${id}`)
+        const { name, url, type1, type2 } = data
+        dispatch(addPokemon({ name, id: newPokemonId.toString(), imgUrl: url, types: [type1, type2] }))
+        navigate(`/pokemons/${newPokemonId}`)
         // handleClose();
     };
 
@@ -66,7 +74,7 @@ export default function PokemonModal({ open, setOpen }) {
                                     },
                                 }}
                             />
-                            <FTextField
+                            {/* <FTextField
                                 name="id"
                                 fullWidth
                                 rows={4}
@@ -77,7 +85,7 @@ export default function PokemonModal({ open, setOpen }) {
                                         borderColor: alpha('#919EAB', 0.32),
                                     },
                                 }}
-                            />
+                            /> */}
                             <FTextField
                                 name="url"
                                 fullWidth

@@ -3,7 +3,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Button, Container, Grid, Stack } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PokeType } from "./PokeType";

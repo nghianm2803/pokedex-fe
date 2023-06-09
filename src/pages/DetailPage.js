@@ -1,9 +1,9 @@
-import { Box, CardMedia, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, CardMedia, Container, Grid, Stack, Typography, Button } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { PokeType } from '../components/PokeType';
-import { getPokemonById } from '../features/pokemons/pokemonSlice';
+import { getPokemonById, deletePokemon } from '../features/pokemons/pokemonSlice';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -19,9 +19,19 @@ export const DetailPage = () => {
 	const { pokemon, nextPokemon, previousPokemon } = useSelector((state) => state.pokemons.pokemon);
 	const { id } = useParams();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		dispatch(getPokemonById(id));
 	}, [id, dispatch]);
+
+	const handleDelete = () => {
+		dispatch(deletePokemon({ id: pokemon.id })).then(() => {
+		  const message = `${pokemon.name} has been deleted.`;
+		  alert(message);
+		  navigate("/");
+		});
+	};
 
 	const weaknesses = calculateWeaknesses(pokemon?.types);
 	return (
@@ -114,6 +124,9 @@ export const DetailPage = () => {
 									</Grid>
 								</Grid>
 							</Box>
+							<Button variant="contained" color="primary" onClick={handleDelete}>
+								Update Pokemon
+							</Button>
 							<Typography variant="p">Type</Typography>
 							<Grid container spacing={1}>
 								{pokemon?.types.map((type) => (
@@ -130,6 +143,9 @@ export const DetailPage = () => {
 									</Grid>
 								))}
 							</Grid>
+							<Button variant="contained" color="error" onClick={handleDelete}>
+								Delete Pokemon
+							</Button>
 						</Stack>
 					</Grid>
 				</Grid>
