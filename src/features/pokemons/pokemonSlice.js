@@ -61,7 +61,7 @@ export const deletePokemon = createAsyncThunk('pokemons/deletePokemon', async ({
     try {
         let url = `/pokemons/${id}`;
         await apiService.delete(url);
-        dispatch(getPokemonById());
+        // dispatch(getPokemonById());
         return;
     } catch (error) {
         return rejectWithValue(error);
