@@ -5,6 +5,7 @@ import MainLayout from './layouts/MainLayout';
 import { HomePage } from './pages/HomePage';
 import { DetailPage } from './pages/DetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import PokeList from './components/PokeList';
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
                             <Route index element={<HomePage />} />
+                            <Route path="/pokemons" element={<PokeList />} />
                             <Route path="/pokemons/:id" element={<DetailPage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Route>

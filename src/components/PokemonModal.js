@@ -43,6 +43,7 @@ export default function PokemonModal({ open, setOpen }) {
         const { name, id, url, type1, type2 } = data
         dispatch(addPokemon({ name, id, imgUrl: url, types: [type1, type2] }))
         navigate(`/pokemons/${id}`)
+        // handleClose();
     };
 
     const handleClose = () => setOpen(false);

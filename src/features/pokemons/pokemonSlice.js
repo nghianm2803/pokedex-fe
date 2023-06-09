@@ -16,7 +16,8 @@ export const getPokemons = createAsyncThunk('pokemons/getPokemons', async ({ pag
             });
         };
         await timeout();
-        return response.data;
+        console.log("Return: ===>>>>" ,response);
+        return response;
     } catch (error) {
         return rejectWithValue(error);
     }
@@ -26,8 +27,8 @@ export const getPokemonById = createAsyncThunk('pokemons/getPokemonById', async 
     try {
         let url = `/pokemons/${id}`;
         const response = await apiService.get(url);
-        if (!response.data) return rejectWithValue({ message: 'No data' });
-        return response.data;
+        if (!response) return rejectWithValue({ message: 'No data' });
+        return response;
     } catch (error) {
         return rejectWithValue(error);
     }
