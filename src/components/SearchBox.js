@@ -63,11 +63,11 @@ export const SearchBox = () => {
     const dispatch = useDispatch();
 
     const onSubmit = (data) => {
-        console.log(data)
-        dispatch(searchQuery(data.search))
-        dispatch(changePage(1))
-    };
-
+        // console.log("Dispatching searchQuery with search:", data.search);
+        dispatch(searchQuery(data.search));
+        dispatch(changePage(1));
+      };
+      
 
     return (
         <Container maxWidth="lg" sx={styles.container}>

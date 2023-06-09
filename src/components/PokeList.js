@@ -8,11 +8,7 @@ import { Box, Button, Container, Grid, Stack } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PokeType } from "./PokeType";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getPokemons,
-  changePage,
-  typeQuery,
-} from "../features/pokemons/pokemonSlice";
+import { changePage, typeQuery } from "../features/pokemons/pokemonSlice";
 import { Link } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
 
@@ -123,10 +119,6 @@ export default function PokeList() {
   const [next, setNext] = useState(false);
   const dispatch = useDispatch();
   const { pokemons } = useSelector((state) => state.pokemons);
-
-  useEffect(() => {
-    dispatch(getPokemons({ page: 1, search: "", type: "" }));
-  }, [dispatch]);
 
   const handleChangePage = () => {
     dispatch(changePage());
