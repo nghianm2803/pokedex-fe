@@ -9,6 +9,8 @@ import { LoadingButton } from '@mui/lab';
 
 import { addPokemon } from '../features/pokemons/pokemonSlice';
 import { useNavigate } from 'react-router-dom';
+import { POKEMONS_PER_PAGE } from '../../app/config';
+
 
 const style = {
     position: 'absolute',
@@ -50,8 +52,12 @@ export default function PokemonModal({ open, setOpen }) {
     const onSubmit = (data) => {
         const { name, url, type1, type2 } = data
         dispatch(addPokemon({ name, id: newPokemonId.toString(), imgUrl: url, types: [type1, type2] }))
-        navigate(`/pokemons/${newPokemonId}`)
-        // handleClose();
+                
+        // Calculate the new page based on the maximum ID and the limit
+        const newPage = Math.ceil((maxPokemonId + 1) / POKEMONS_PER_PAGE);
+
+        navigate(`/pokemons/${newPokemonId}`, { state: { page: newPage } });
+        handleClose();
     };
 
     const handleClose = () => setOpen(false);
