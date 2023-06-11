@@ -6,9 +6,10 @@ import {
   Box,
   alpha,
   Stack,
+  Chip,
   MenuItem,
   Select,
-  OutlinedInput,
+  Typography,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
@@ -57,13 +58,14 @@ export default function PokemonModal({ open, setOpen }) {
   const newPokemonId = maxPokemonId + 1;
 
   const onSubmit = (data) => {
-    const { name, url, type1, type2 } = data;
+    const { name, url } = data;
+    const types = selectedTypes.filter((type) => type !== "");
     dispatch(
       addPokemon({
         name,
         id: newPokemonId.toString(),
         imgUrl: url,
-        types: [type1, type2].filter((type) => type !== ""),
+        types,
       })
     );
     navigate("/");
@@ -71,6 +73,26 @@ export default function PokemonModal({ open, setOpen }) {
   };
 
   const handleClose = () => setOpen(false);
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  const [selectedTypes, setSelectedTypes] = useState([]);
+
+  const handleChange = (event) => {
+    const selected = event.target.value;
+    if (selected.length <= 2) {
+      setSelectedTypes(selected);
+    }
+  };
 
   return (
     <div>
@@ -83,11 +105,12 @@ export default function PokemonModal({ open, setOpen }) {
         <Box sx={style}>
           <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
+              <Typography variant="subtitle2">Name</Typography>
               <FTextField
                 name="name"
                 fullWidth
                 rows={4}
-                placeholder="Name"
+                placeholder="Enter Pokemon's name"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
@@ -95,11 +118,12 @@ export default function PokemonModal({ open, setOpen }) {
                   },
                 }}
               />
+              <Typography variant="subtitle2">Image Url</Typography>
               <FTextField
                 name="url"
                 fullWidth
                 // rows={4}
-                placeholder="Image Url"
+                placeholder="Enter Image Url"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
@@ -107,45 +131,36 @@ export default function PokemonModal({ open, setOpen }) {
                   },
                 }}
               />
-              <FTextField
-                name="type1"
-                fullWidth
-                rows={4}
-                placeholder="Type 1"
-                sx={{
-                  "& fieldset": {
-                    borderWidth: `1px !important`,
-                    borderColor: alpha("#919EAB", 0.32),
-                  },
-                }}
-              />
-              <FTextField
-                name="type2"
-                fullWidth
-                rows={4}
-                placeholder="Type 2"
-                sx={{
-                  "& fieldset": {
-                    borderWidth: `1px !important`,
-                    borderColor: alpha("#919EAB", 0.32),
-                  },
-                }}
-              />
-
-              {/* <Select
-                                labelId="demo-multiple-name-label"
-                                id="demo-multiple-name"
-                                multiple
-                                value={selectedTypes}
-                                // onChange={handleChange}
-                                input={<OutlinedInput label="Name" />}
-                                >
-                                {pokemonTypes.map((type) => (
-                                    <MenuItem key={type} value={type}>
-                                    {type}
-                                    </MenuItem>
-                                ))}
-                                </Select> */}
+              <Typography variant="subtitle2">Select types</Typography>
+              <Select
+                labelId="multiple-types-label"
+                id="multiple-types"
+                multiple
+                value={selectedTypes}
+                onChange={handleChange}
+                MenuProps={MenuProps}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+              >
+                {pokemonTypes.map((type) => (
+                  <MenuItem key={type} value={type}>
+                    <span
+                      style={{
+                        fontWeight: selectedTypes.includes(type)
+                          ? "bold"
+                          : "normal",
+                      }}
+                    >
+                      {type}
+                    </span>
+                  </MenuItem>
+                ))}
+              </Select>
               <Box
                 sx={{
                   display: "flex",
