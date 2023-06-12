@@ -20,7 +20,7 @@ import { LoadingButton } from "@mui/lab";
 import React, { useState, useEffect } from "react";
 
 import { addPokemon } from "../features/pokemons/pokemonSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
 import { TYPE } from "../themeContext/MThemeProvider";
 
@@ -51,12 +51,14 @@ export default function PokemonModal({ open, setOpen }) {
   const [notification, setNotification] = useState(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+
   const methods = useForm(defaultValues);
   const {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  const dispatch = useDispatch();
 
   const { pokemons } = useSelector((state) => state.pokemons);
 
@@ -100,7 +102,14 @@ export default function PokemonModal({ open, setOpen }) {
         types,
       })
     );
-    navigate("/");
+    
+    const { state } = location;
+
+    if (state && state.pokemonAdded) {
+      delete state.pokemonAdded;
+    }
+
+    navigate("/", { state: { pokemonAdded: true } });
     handleClose();
   };
 
