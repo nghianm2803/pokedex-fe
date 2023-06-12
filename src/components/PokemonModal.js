@@ -8,6 +8,7 @@ import {
   Stack,
   Chip,
   MenuItem,
+  Button,
   Select,
   Typography,
   Alert,
@@ -19,7 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { LoadingButton } from "@mui/lab";
 import React, { useState, useEffect } from "react";
 
-import { addPokemon } from "../features/pokemons/pokemonSlice";
+import { addPokemon, editPokemon } from "../features/pokemons/pokemonSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
 import { TYPE } from "../themeContext/MThemeProvider";
@@ -44,7 +45,12 @@ const defaultValues = {
   type2: "",
 };
 
-export default function PokemonModal({ open, setOpen }) {
+export default function PokemonModal({
+  open,
+  setOpen,
+  pokemon,
+  updatePokemon,
+}) {
   const [isValid, setIsValid] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(false);
@@ -58,6 +64,7 @@ export default function PokemonModal({ open, setOpen }) {
   const {
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = methods;
 
   const { pokemons } = useSelector((state) => state.pokemons);
@@ -70,6 +77,7 @@ export default function PokemonModal({ open, setOpen }) {
   // Calculate the new ID by incrementing the maximum ID by 1
   const newPokemonId = maxPokemonId + 1;
 
+  // Validate input
   useEffect(() => {
     // Check if name, url, and types are not empty
     const name = methods.watch("name") || "";
@@ -91,17 +99,36 @@ export default function PokemonModal({ open, setOpen }) {
     setIsValid(isFormValid);
   }, [methods.watch("name"), methods.watch("url")]);
 
+  useEffect(() => {
+    if (pokemon) {
+      reset(pokemon); // Set default values from the 'pokemon' object
+      setSelectedTypes(pokemon.types);
+    }
+  }, [open, pokemon, reset]);
+
   const onSubmit = (data) => {
     const { name, url } = data;
     const types = selectedTypes.filter((type) => type !== "");
-    dispatch(
-      addPokemon({
-        name,
-        id: newPokemonId.toString(),
-        imgUrl: url,
-        types,
-      })
-    );
+
+    if (updatePokemon) {
+      dispatch(
+        editPokemon({
+          name,
+          id: pokemon.id,
+          imgUrl: url,
+          types,
+        })
+      );
+    } else {
+      dispatch(
+        addPokemon({
+          name,
+          id: newPokemonId.toString(),
+          imgUrl: url,
+          types,
+        })
+      );
+    }
 
     const { state } = location;
 
@@ -247,6 +274,10 @@ export default function PokemonModal({ open, setOpen }) {
                   justifyContent: "flex-end",
                 }}
               >
+                <Button variant="outlined" size="small" onClick={handleClose}>
+                  Cancel
+                </Button>
+
                 <LoadingButton
                   type="submit"
                   variant="contained"
@@ -257,7 +288,7 @@ export default function PokemonModal({ open, setOpen }) {
                   }
                   disabled={!isValid} // Disable the button when form is invalid
                 >
-                  Create Pokemon
+                  {updatePokemon ? "Save" : "Create Pokemon"}
                 </LoadingButton>
               </Box>
             </Stack>
