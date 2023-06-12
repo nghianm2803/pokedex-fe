@@ -10,13 +10,19 @@ import {
   MenuItem,
   Select,
   Typography,
+  Alert,
+  IconButton,
+  Collapse,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { LoadingButton } from "@mui/lab";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { addPokemon } from "../features/pokemons/pokemonSlice";
 import { useNavigate } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
+import { TYPE } from "../themeContext/MThemeProvider";
 
 const style = {
   position: "absolute",
@@ -39,6 +45,11 @@ const defaultValues = {
 };
 
 export default function PokemonModal({ open, setOpen }) {
+
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [displayAlert, setDisplayAlert] = useState(false);
+  const [notification, setNotification] = useState(true);
+
   const navigate = useNavigate();
   const methods = useForm(defaultValues);
   const {
@@ -85,12 +96,13 @@ export default function PokemonModal({ open, setOpen }) {
     },
   };
 
-  const [selectedTypes, setSelectedTypes] = useState([]);
-
   const handleChange = (event) => {
     const selected = event.target.value;
     if (selected.length <= 2) {
       setSelectedTypes(selected);
+      setDisplayAlert(false);
+    } else {
+      setDisplayAlert(true);
     }
   };
 
@@ -132,6 +144,29 @@ export default function PokemonModal({ open, setOpen }) {
                 }}
               />
               <Typography variant="subtitle2">Select types</Typography>
+              {displayAlert && (
+                <Collapse in={notification}>
+                  <Alert
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={() => {
+                          setNotification(false);
+                        }}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    }
+                    variant="filled"
+                    severity="info"
+                    sx={{ mb: 2 }}
+                  >
+                    Each Pokemon can have a maximum of 2 types!
+                  </Alert>
+                </Collapse>
+              )}
               <Select
                 labelId="multiple-types-label"
                 id="multiple-types"
@@ -140,9 +175,22 @@ export default function PokemonModal({ open, setOpen }) {
                 onChange={handleChange}
                 MenuProps={MenuProps}
                 renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 0.5,
+                    }}
+                  >
                     {selected.map((value) => (
-                      <Chip key={value} label={value} />
+                      <Chip
+                        key={value}
+                        label={value}
+                        style={{
+                          background: TYPE[value.toLowerCase()],
+                          color: TYPE[`${value.toLowerCase()}Text`],
+                        }}
+                      />
                     ))}
                   </Box>
                 )}
@@ -151,6 +199,7 @@ export default function PokemonModal({ open, setOpen }) {
                   <MenuItem key={type} value={type}>
                     <span
                       style={{
+                        color: selectedTypes.includes(type) ? "green" : "",
                         fontWeight: selectedTypes.includes(type)
                           ? "bold"
                           : "normal",
