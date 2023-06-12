@@ -17,7 +17,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import { LoadingButton } from "@mui/lab";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { addPokemon } from "../features/pokemons/pokemonSlice";
 import { useNavigate } from "react-router-dom";
@@ -45,7 +45,7 @@ const defaultValues = {
 };
 
 export default function PokemonModal({ open, setOpen }) {
-
+  const [isValid, setIsValid] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(false);
   const [notification, setNotification] = useState(true);
@@ -67,6 +67,27 @@ export default function PokemonModal({ open, setOpen }) {
 
   // Calculate the new ID by incrementing the maximum ID by 1
   const newPokemonId = maxPokemonId + 1;
+
+  useEffect(() => {
+    // Check if name, url, and types are not empty
+    const name = methods.watch("name") || "";
+    const url = methods.watch("url") || "";
+
+    const isFormValid =
+      name.trim() !== "" &&
+      url.trim() !== "" &&
+      selectedTypes.length > 0 &&
+      selectedTypes.length <= 2;
+    setIsValid(isFormValid);
+  }, [methods, selectedTypes]);
+
+  useEffect(() => {
+    const name = methods.watch("name") || "";
+    const url = methods.watch("url") || "";
+    const isFormValid =
+      name.trim() !== "" && url.trim() !== "" && selectedTypes.length > 0;
+    setIsValid(isFormValid);
+  }, [methods.watch("name"), methods.watch("url")]);
 
   const onSubmit = (data) => {
     const { name, url } = data;
@@ -225,6 +246,7 @@ export default function PokemonModal({ open, setOpen }) {
                     isSubmitting
                     // || isLoading
                   }
+                  disabled={!isValid} // Disable the button when form is invalid
                 >
                   Create Pokemon
                 </LoadingButton>
