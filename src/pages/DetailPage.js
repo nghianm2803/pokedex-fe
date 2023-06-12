@@ -1,13 +1,11 @@
 import { Box, CardMedia, Container, Grid, Stack, Typography, Button } from '@mui/material';
-import React, { useEffect , useState} from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { PokeType } from '../components/PokeType';
-import { getPokemonById, deletePokemon ,editPokemon} from '../features/pokemons/pokemonSlice';
+import { getPokemonById, deletePokemon } from '../features/pokemons/pokemonSlice';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import PokemonModal from "../components/PokemonModal";
-
 
 const styles = {
 	container: {
@@ -23,15 +21,9 @@ export const DetailPage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [open, setOpen] = useState(false);
-	
 	useEffect(() => {
 		dispatch(getPokemonById(id));
 	}, [id, dispatch]);
-
-	const handleUpdate = () => {
-		setOpen(true);
-	};
 
 	const handleDelete = () => {
 		dispatch(deletePokemon({ id: pokemon.id })).then(() => {
@@ -132,9 +124,8 @@ export const DetailPage = () => {
 									</Grid>
 								</Grid>
 							</Box>
-							<Button variant="contained" color="primary" onClick={handleUpdate}>
+							<Button variant="contained" color="primary" onClick={handleDelete}>
 								Update Pokemon
-								<PokemonModal open={open} setOpen={setOpen} pokemon={pokemon} isEditMode={true} />
 							</Button>
 							<Typography variant="p">Type</Typography>
 							<Grid container spacing={1}>

@@ -19,7 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { LoadingButton } from "@mui/lab";
 import React, { useState, useEffect } from "react";
 
-import { addPokemon, editPokemon } from "../features/pokemons/pokemonSlice";
+import { addPokemon } from "../features/pokemons/pokemonSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
 import { TYPE } from "../themeContext/MThemeProvider";
@@ -44,7 +44,7 @@ const defaultValues = {
   type2: "",
 };
 
-export default function PokemonModal({ open, setOpen, pokemon, isEditMode }) {
+export default function PokemonModal({ open, setOpen }) {
   const [isValid, setIsValid] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(false);
@@ -91,51 +91,17 @@ export default function PokemonModal({ open, setOpen, pokemon, isEditMode }) {
     setIsValid(isFormValid);
   }, [methods.watch("name"), methods.watch("url")]);
 
-  useEffect(() => {
-    if (pokemon && isEditMode) {
-      const { name, url, types } = pokemon;
-
-      // Set the initial form values to the values of the selected Pokemon
-      methods.reset({
-        name,
-        url,
-        type1: types[0] || "",
-        type2: types[1] || "",
-      });
-
-      // Set the selected types to the types of the selected Pokemon
-      setSelectedTypes(types);
-    } else {
-      // Clear the form fields and selected types if not in edit mode
-      methods.reset(defaultValues);
-      setSelectedTypes([]);
-    }
-  }, [pokemon, methods, isEditMode]);
-
   const onSubmit = (data) => {
-    const { name, url, type1, type2 } = data;
-    const types = [type1, type2].filter((type) => type !== "");
-
-    if (isEditMode) {
-      // Dispatch the editPokemon action with the updated values
-      dispatch(
-        editPokemon({
-          name,
-          id: pokemon.id,
-          imgUrl: url,
-          types,
-        })
-      );
-    } else {
-      dispatch(
-        addPokemon({
-          name,
-          id: newPokemonId.toString(),
-          imgUrl: url,
-          types,
-        })
-      );
-    }
+    const { name, url } = data;
+    const types = selectedTypes.filter((type) => type !== "");
+    dispatch(
+      addPokemon({
+        name,
+        id: newPokemonId.toString(),
+        imgUrl: url,
+        types,
+      })
+    );
 
     const { state } = location;
 
