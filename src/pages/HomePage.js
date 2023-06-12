@@ -11,10 +11,12 @@ export const HomePage = () => {
   const { search, page, type } = useSelector((state) => state.pokemons);
   const dispatch = useDispatch();
   const location = useLocation();
-  const { state } = location;
-  const pokemonAdded = state ? state.pokemonAdded : false;
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { vertical, horizontal } = { vertical: "top", horizontal: "right" };
+
+  const { state } = location;
+  const pokemonAdded = state ? state.pokemonAdded : false;
 
   useEffect(() => {
     console.log("Pokemon added:", pokemonAdded);
@@ -27,10 +29,7 @@ export const HomePage = () => {
     }
   }, [pokemonAdded, location]);
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleClose = () => {
     setOpenSnackbar(false);
   };
 
@@ -42,9 +41,10 @@ export const HomePage = () => {
     <>
       {pokemonAdded && (
         <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
           open={openSnackbar}
-          autoHideDuration={5000}
           onClose={handleClose}
+          key={vertical + horizontal}
         >
           <Alert
             onClose={handleClose}

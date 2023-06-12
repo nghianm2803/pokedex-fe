@@ -102,7 +102,7 @@ export default function PokemonModal({ open, setOpen }) {
         types,
       })
     );
-    
+
     const { state } = location;
 
     if (state && state.pokemonAdded) {
