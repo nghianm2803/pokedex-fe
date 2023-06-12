@@ -13,3 +13,5 @@ yarn start
 
 The site will be up at <http://localhost:3000/>
 
+Demo: https://pokedex-doo.netlify.app/
+
