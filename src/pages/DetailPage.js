@@ -132,7 +132,16 @@ export const DetailPage = () => {
 									</Grid>
 									<Grid item xs={6}>
 										<Typography color="white">Abilities</Typography>
-										<div>{pokemon?.abilities || 'Unknown'}</div>
+										{/* <div>{pokemon?.abilities || 'Unknown'}</div> */}
+										<div>
+											{pokemon?.abilities ? (
+											JSON.parse(pokemon.abilities.replace(/'/g, '"')).map((ability, index) => (
+												<div key={index}>{ability}</div>
+											))
+											) : (
+											<div>Unknown</div>
+											)}
+										</div>
 									</Grid>
 								</Grid>
 							</Box>
