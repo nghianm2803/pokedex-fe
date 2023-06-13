@@ -60,8 +60,6 @@ export const DetailPage = () => {
   const feet = Math.floor(pokemon?.height);
   const inches = Math.round((pokemon?.height - feet) * 12);
 
-  const weightInPounds = Math.floor(pokemon?.weight);
-
   const weaknesses = calculateWeaknesses(pokemon?.types);
   return (
     <Container maxWidth="lg" disableGutters sx={styles.container}>
@@ -226,8 +224,8 @@ export const DetailPage = () => {
                   <Grid item xs={6}>
                     <Typography color="white">Weight</Typography>
                     <div>
-                      {pokemon?.weight
-                        ? `${weightInPounds.toFixed(1)} lbs`
+                      {typeof pokemon?.weight === "string"
+                        ? `${parseFloat(pokemon.weight).toFixed(1)} lbs`
                         : "Unknown"}
                     </div>
                   </Grid>
