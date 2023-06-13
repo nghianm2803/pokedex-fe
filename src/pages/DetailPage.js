@@ -60,6 +60,8 @@ export const DetailPage = () => {
   const feet = Math.floor(pokemon?.height);
   const inches = Math.round((pokemon?.height - feet) * 12);
 
+  const weightInPounds = Math.floor(pokemon?.weight);
+
   const weaknesses = calculateWeaknesses(pokemon?.types);
   return (
     <Container maxWidth="lg" disableGutters sx={styles.container}>
@@ -223,7 +225,11 @@ export const DetailPage = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Weight</Typography>
-                    <div>{`${pokemon?.weight} lbs` || "Unknown"}</div>
+                    <div>
+                      {pokemon?.weight
+                        ? `${weightInPounds.toFixed(1)} lbs`
+                        : "Unknown"}
+                    </div>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Category</Typography>
@@ -231,8 +237,8 @@ export const DetailPage = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Abilities</Typography>
-                    {/* <div>{pokemon?.abilities || 'Unknown'}</div> */}
-                    <div>
+                    <div>{pokemon?.abilities || "Unknown"}</div>
+                    {/* <div>
                       {pokemon?.abilities ? (
                         JSON.parse(pokemon.abilities.replace(/'/g, '"')).map(
                           (ability, index) => <div key={index}>{ability}</div>
@@ -240,7 +246,7 @@ export const DetailPage = () => {
                       ) : (
                         <div>Unknown</div>
                       )}
-                    </div>
+                    </div> */}
                   </Grid>
                 </Grid>
               </Box>
