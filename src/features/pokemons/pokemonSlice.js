@@ -36,10 +36,10 @@ export const getPokemonById = createAsyncThunk('pokemons/getPokemonById', async 
 
 export const addPokemon = createAsyncThunk(
     'pokemons/addPokemon',
-    async ({ name, id, imgUrl, types }, { rejectWithValue }) => {
+    async ({ name, id, imgUrl, types, height, weight, category, abilities }, { rejectWithValue }) => {
         try {
             let url = '/pokemons';
-            await apiService.post(url, { name, id, url: imgUrl, types });
+            await apiService.post(url, { name, id, url: imgUrl, types, height, weight, category, abilities });
             return
         } catch (error) {
             return rejectWithValue(error)
@@ -47,10 +47,10 @@ export const addPokemon = createAsyncThunk(
     }
 )
 
-export const editPokemon = createAsyncThunk('pokemons/editPokemon', async ({ name, id, imgUrl, types }, { rejectWithValue }) => {
+export const editPokemon = createAsyncThunk('pokemons/editPokemon', async ({ name, id, imgUrl, types, height, weight, category, abilities }, { rejectWithValue }) => {
     try {
         let url = `/pokemons/${id}`;
-        await apiService.put(url, { name, url: imgUrl, types });
+        await apiService.put(url, { name, url: imgUrl, types, height, weight, category, abilities });
         return;
     } catch (error) {
         return rejectWithValue(error);

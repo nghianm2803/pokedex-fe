@@ -18,7 +18,6 @@ import {
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PokemonModal from "../components/PokemonModal";
-import convert from "convert-units";
 
 const styles = {
   container: {
@@ -58,13 +57,8 @@ export const DetailPage = () => {
     });
   };
 
-  const heightInMeters = pokemon?.height;
-  const heightInFt = convert(heightInMeters).from("m").to("ft");
-  const feet = Math.floor(heightInFt);
-  const inches = Math.round((heightInFt - feet) * 12);
-
-  const weightInKg = pokemon?.weight;
-  const weightInPounds = convert(weightInKg).from("kg").to("lb");
+  const feet = Math.floor(pokemon?.height);
+  const inches = Math.round((pokemon?.height - feet) * 12);
 
   const weaknesses = calculateWeaknesses(pokemon?.types);
   return (
@@ -222,18 +216,14 @@ export const DetailPage = () => {
                   <Grid item xs={6}>
                     <Typography color="white">Height</Typography>
                     <div>
-                      {heightInMeters
+                      {pokemon?.height
                         ? `${feet}' ${inches < 10 ? "0" : ""}${inches}"`
                         : "Unknown"}
                     </div>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Weight</Typography>
-                    <div>
-                      {weightInKg
-                        ? `${weightInPounds.toFixed(1)} lbs`
-                        : "Unknown"}
-                    </div>
+                    <div>{`${pokemon?.weight} lbs` || "Unknown"}</div>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Category</Typography>

@@ -41,6 +41,10 @@ const defaultValues = {
   name: "",
   id: "",
   url: "",
+  height: "",
+  weight: "",
+  category: "",
+  abilities: "",
   type1: "",
   type2: "",
 };
@@ -82,10 +86,18 @@ export default function PokemonModal({
     // Check if name, url, and types are not empty
     const name = methods.watch("name") || "";
     const url = methods.watch("url") || "";
+    const height = methods.watch("height") || "";
+    const weight = methods.watch("weight") || "";
+    const category = methods.watch("category") || "";
+    const abilities = methods.watch("abilities") || "";
 
     const isFormValid =
       name.trim() !== "" &&
       url.trim() !== "" &&
+      height.trim() !== "" &&
+      weight.trim() !== "" &&
+      category.trim() !== "" &&
+      abilities.trim() !== "" &&
       selectedTypes.length > 0 &&
       selectedTypes.length <= 2;
     setIsValid(isFormValid);
@@ -94,10 +106,27 @@ export default function PokemonModal({
   useEffect(() => {
     const name = methods.watch("name") || "";
     const url = methods.watch("url") || "";
+    const height = methods.watch("height") || "";
+    const weight = methods.watch("weight") || "";
+    const category = methods.watch("category") || "";
+    const abilities = methods.watch("abilities") || "";
     const isFormValid =
-      name.trim() !== "" && url.trim() !== "" && selectedTypes.length > 0;
+      name.trim() !== "" &&
+      url.trim() !== "" &&
+      height.trim() !== "" &&
+      weight.trim() !== "" &&
+      category.trim() !== "" &&
+      abilities.trim() !== "" &&
+      selectedTypes.length > 0;
     setIsValid(isFormValid);
-  }, [methods.watch("name"), methods.watch("url")]);
+  }, [
+    methods.watch("name"),
+    methods.watch("url"),
+    methods.watch("height"),
+    methods.watch("weight"),
+    methods.watch("category"),
+    methods.watch("abilities"),
+  ]);
 
   useEffect(() => {
     if (pokemon) {
@@ -107,7 +136,7 @@ export default function PokemonModal({
   }, [open, pokemon, reset]);
 
   const onSubmit = (data) => {
-    const { name, url } = data;
+    const { name, url, height, weight, category, abilities } = data;
     const types = selectedTypes.filter((type) => type !== "");
 
     if (updatePokemon) {
@@ -117,6 +146,10 @@ export default function PokemonModal({
           id: pokemon.id,
           imgUrl: url,
           types,
+          height,
+          weight,
+          category,
+          abilities,
         })
       );
     } else {
@@ -126,6 +159,10 @@ export default function PokemonModal({
           id: newPokemonId.toString(),
           imgUrl: url,
           types,
+          height,
+          weight,
+          category,
+          abilities,
         })
       );
     }
@@ -193,6 +230,58 @@ export default function PokemonModal({
                 fullWidth
                 // rows={4}
                 placeholder="Enter Image Url"
+                sx={{
+                  "& fieldset": {
+                    borderWidth: `1px !important`,
+                    borderColor: alpha("#919EAB", 0.32),
+                  },
+                }}
+              />
+              <Typography variant="subtitle2">Height (ft)</Typography>
+              <FTextField
+                name="height"
+                fullWidth
+                rows={4}
+                placeholder="Enter Pokemon's height (feet)"
+                sx={{
+                  "& fieldset": {
+                    borderWidth: `1px !important`,
+                    borderColor: alpha("#919EAB", 0.32),
+                  },
+                }}
+              />
+              <Typography variant="subtitle2">Weight (lb)</Typography>
+              <FTextField
+                name="weight"
+                fullWidth
+                rows={4}
+                placeholder="Enter Pokemon's weight (pound)"
+                sx={{
+                  "& fieldset": {
+                    borderWidth: `1px !important`,
+                    borderColor: alpha("#919EAB", 0.32),
+                  },
+                }}
+              />
+              <Typography variant="subtitle2">Category</Typography>
+              <FTextField
+                name="category"
+                fullWidth
+                rows={4}
+                placeholder="Enter Pokemon's category"
+                sx={{
+                  "& fieldset": {
+                    borderWidth: `1px !important`,
+                    borderColor: alpha("#919EAB", 0.32),
+                  },
+                }}
+              />
+              <Typography variant="subtitle2">Abilities</Typography>
+              <FTextField
+                name="abilities"
+                fullWidth
+                rows={4}
+                placeholder="Enter Pokemon's abilities"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
