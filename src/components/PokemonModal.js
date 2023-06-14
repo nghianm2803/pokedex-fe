@@ -89,18 +89,10 @@ export default function PokemonModal({
     // Check if name, url, and types are not empty
     const name = methods.watch("name") || "";
     const url = methods.watch("url") || "";
-    const height = methods.watch("height") || "";
-    const weight = methods.watch("weight") || "";
-    const category = methods.watch("category") || "";
-    const abilities = methods.watch("abilities") || "";
 
     const isFormValid =
       name.trim() !== "" &&
       url.trim() !== "" &&
-      height.trim() !== "" &&
-      weight.trim() !== "" &&
-      category.trim() !== "" &&
-      abilities.trim() !== "" &&
       selectedTypes.length > 0 &&
       selectedTypes.length <= 2;
     setIsValid(isFormValid);
@@ -109,18 +101,8 @@ export default function PokemonModal({
   useEffect(() => {
     const name = methods.watch("name") || "";
     const url = methods.watch("url") || "";
-    const height = methods.watch("height") || "";
-    const weight = methods.watch("weight") || "";
-    const category = methods.watch("category") || "";
-    const abilities = methods.watch("abilities") || "";
     const isFormValid =
-      name.trim() !== "" &&
-      url.trim() !== "" &&
-      height.trim() !== "" &&
-      weight.trim() !== "" &&
-      category.trim() !== "" &&
-      abilities.trim() !== "" &&
-      selectedTypes.length > 0;
+      name.trim() !== "" && url.trim() !== "" && selectedTypes.length > 0;
     setIsValid(isFormValid);
   }, [
     methods.watch("name"),
@@ -218,8 +200,9 @@ export default function PokemonModal({
               <FTextField
                 name="name"
                 fullWidth
+                required
+                label="Pokemon's name"
                 rows={4}
-                placeholder="Enter Pokemon's name"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
@@ -231,8 +214,8 @@ export default function PokemonModal({
               <FTextField
                 name="url"
                 fullWidth
-                // rows={4}
-                placeholder="Enter Image Url"
+                required
+                label="Pokemon's image url"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
@@ -245,12 +228,18 @@ export default function PokemonModal({
                 name="height"
                 fullWidth
                 rows={4}
-                placeholder="Enter Pokemon's height (feet)"
+                type="number"
+                label="Pokemon's height (feet)"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
                     borderColor: alpha("#919EAB", 0.32),
                   },
+                }}
+                inputProps={{
+                  step: "0.0000001",
+                  min: 0,
+                  max: 100,
                 }}
               />
               <Typography variant="subtitle2">Weight (lb)</Typography>
@@ -258,12 +247,18 @@ export default function PokemonModal({
                 name="weight"
                 fullWidth
                 rows={4}
-                placeholder="Enter Pokemon's weight (pounds)"
+                type="number"
+                label="Pokemon's weight (pounds)"
                 sx={{
                   "& fieldset": {
                     borderWidth: `1px !important`,
                     borderColor: alpha("#919EAB", 0.32),
                   },
+                }}
+                inputProps={{
+                  step: "0.0000001",
+                  min: 0,
+                  max: 100,
                 }}
               />
               <Typography variant="subtitle2">Category</Typography>
